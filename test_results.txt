@@ -1,0 +1,145 @@
+SQL Injection Detection and Mitigation
+Final Security Test Results
+
+Test 1: Valid credentials
+Expected: Login successful
+Actual: Login successful. Alice's role displayed.
+Status: PASS
+
+Test 2: Incorrect password
+Expected: Login rejected
+Actual: Login failed with a generic message.
+Status: PASS
+
+Test 3: Apostrophe in username
+Expected: Login rejected without SQL error
+Actual: Login failed with a generic message.
+Status: PASS
+
+Test 4: Password hashing
+Expected: Passwords stored as salted PBKDF2 hashes.
+Actual: All three lab accounts migrated successfully.
+Status: PASS
+
+Test 5: Password verification
+Expected: Correct password accepted; incorrect password rejected.
+Actual: Correct password verified; incorrect password rejected.
+Status: PASS
+
+Test 6: Parameterized query
+Expected: User input treated as data.
+Actual: Secure application uses SQL placeholders.
+Status: PASS
+
+Limitations:
+These tests verify the specified cases only.
+They do not establish that every SQL injection attack is prevented.
+The vulnerable demonstration has not yet been successfully
+verified with an authentication-bypass test.
+
+SQL Injection Detection and Mitigation Project
+Test Results
+
+1. Vulnerable Login - Valid Credentials
+   Result: Successful login using the isolated test account.
+   Status: PASS
+
+2. Vulnerable Login - Malformed Username
+   Result: SQLite OperationalError occurred when the username
+   contained a single quote.
+   Status: DEMONSTRATED
+
+3. Invalid Password
+   Result: Both vulnerable and parameterized baseline queries
+   returned no matching user.
+   Status: PASS
+
+4. SQL UNION Demonstration
+   Result: A standalone SQLite UNION query returned two rows
+   containing three columns.
+   Status: PASS - SQL OPERATION DEMONSTRATED
+
+5. Parameterized Query Inspection
+   Result: The secure application uses a parameter placeholder
+   and passes the username separately.
+   Status: VERIFIED IN SOURCE CODE
+
+6. Password Hash Verification
+   Result: Correct password returned True; incorrect password
+   returned False.
+   Status: PASS
+
+7. Secure Login - Invalid Credentials
+   Result: The application rejected the login without displaying
+   a detailed database error.
+   Status: PASS
+
+8. Authentication Bypass
+   Result: Automated tests demonstrated a controlled authentication
+   bypass against the intentionally vulnerable query in the isolated
+   test database. The secure query rejected the same bypass input.
+   Status: VERIFIED IN AUTOMATED TESTS
+
+9. UNION-Based SQL Injection Against Login
+   Result: The standalone UNION operation was demonstrated, but
+   injection through the login application was not demonstrated.
+   Status: NOT VERIFIED
+
+--------------------------------------------------
+Additional Security Controls Tests
+--------------------------------------------------
+
+Test 10: Rate limiting after repeated failed attempts
+Result: Rate limiting activated after five recorded failures
+Status: PASS
+
+Test 11: Successful login clears failure history
+Result: Test confirmed that failure history was cleared
+Status: PASS
+
+Test 12: Failed login security logging
+Result: Failed login event was written to the test log
+Status: PASS
+
+Test 13: Successful login security logging
+Result: Successful login event was written to the test log
+Status: PASS
+
+Test 14: Application rate-limiting integration
+Result: Five failed login attempts through the login function
+were followed by a positive rate-limit check.
+Status: PASS
+
+Limitations:
+These tests cover the specific scenarios described above.
+They do not prove that all SQL injection attacks or
+authentication bypass attempts are prevented.
+Rate limiting and logging require further review before
+production deployment.
+
+==================================================
+LATEST AUTOMATED TEST RUN
+==================================================
+Command:
+python3 -m unittest discover -s test_lab -p 'test_*.py' -v
+
+Result:
+Ran 11 tests successfully.
+Status: PASS
+
+Coverage:
+- Parameterized query handling
+- Valid and invalid user checks
+- SQL injection input treated as data
+- Login rate limiting
+- Clearing failure history after successful login
+- Failed and successful login security logging
+- Vulnerable and secure login comparison
+
+Limitations:
+Passing tests apply only to the scenarios exercised.
+A controlled authentication bypass was demonstrated against the
+intentionally vulnerable query in the isolated test database.
+The secure query rejected the same bypass input.
+UNION-based SQL injection through the login application remains - NOT VERIFIED.
+Further security review is required before production use.

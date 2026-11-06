@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Security logs
+logs/*.log
+
+# Backup files
+*backup*
+*before_*
+*.bak
+
+# Environment secrets
+.env
+.env.*
+!.env.example

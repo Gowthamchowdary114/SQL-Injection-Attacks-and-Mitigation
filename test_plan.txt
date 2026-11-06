@@ -1,0 +1,60 @@
+# SQL Injection Detection and Mitigation
+
+## Test Plan
+
+### Test 1: Valid Credentials
+
+**Objective:** Verify that a user with valid credentials can log in.
+**Expected:** Login succeeds.
+
+### Test 2: Incorrect Password
+
+**Objective:** Verify that incorrect credentials are rejected.
+**Expected:** Login fails without revealing sensitive database details.
+
+### Test 3: SQL Metacharacters in Username
+
+**Objective:** Check whether SQL metacharacters are treated as input data.
+**Expected:** The secure parameterized query does not interpret the input as SQL code.
+
+### Test 4: Compare Vulnerable and Secure Query Construction
+
+**Objective:** Compare a query constructed through string interpolation with a parameterized query.
+**Expected:** The vulnerable query is susceptible to SQL injection, while the parameterized query keeps input separate from SQL syntax.
+
+### Test 5: Error Handling
+
+**Objective:** Check how database errors are handled.
+**Expected:** Internal database errors are not exposed to users.
+
+### Test 6: Authentication Bypass
+
+**Objective:** Compare the vulnerable and secure queries using a controlled authentication-bypass payload against the isolated test database.
+**Expected:** The vulnerable query demonstrates the bypass; the secure parameterized query returns no matching record.
+
+### Test 8: Login Rate Limiting
+
+**Objective:** Verify the response to repeated failed login attempts.
+**Expected:** The configured rate limit activates after five recorded failures.
+
+### Test 9: Security Event Logging
+
+**Objective:** Check whether failed and successful login attempts are logged.
+**Expected:** The relevant login events are recorded in the security log.
+
+### Test 10: Automated Security Tests
+
+**Objective:** Run the available automated tests for authentication, parameterized queries, rate limiting, and security logging.
+**Expected:** Each test passes when its expected behavior is satisfied.
+
+## Scope and Limitations
+
+Tests are conducted against the isolated SQLite test database and the local application. Passing these tests demonstrates only the specific behaviors tested; it does not prove that all SQL injection attacks are prevented or that the application is ready for production deployment.
+
+### Test 7: Standalone UNION Query Demonstration
+
+**Objective:** Demonstrate UNION-based SQL query behavior using a controlled SQLite example.
+
+**Expected:** The standalone demonstration shows how a UNION query can combine results. This does not establish that UNION-based injection works against the actual login application.
+
+**Status:** Standalone demonstration completed. UNION-based injection through the login application remains NOT VERIFIED.
